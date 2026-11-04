@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ===================================================
+   DARK THEME (Deep Slate / Vibrant High-Contrast Text)
+=================================================== */
+body.dark-mode {
+  --bg-canvas: #070a12;
+  --bg-surface: #0f172a;
+  --bg-card: #141e33;
+  --border-color: rgba(255, 255, 255, 0.12);
+
+  /* Vivid text colors */
+  --text-main: #ffffff;
+  --text-dim: #94a3b8;
+  --repo-name: #a5b4fc;  /* Bright Indigo */
+  --repo-url: #38bdf8;   /* Electric Sky Blue */
+  --repo-owner: #cbd5e1; /* Soft White */
+  --metric-val: #f8fafc;
+
+  /* Inputs and controls */
+  --input-bg: #1e293b;
+  --input-border: #475569;
+  --input-text: #ffffff;
+  --input-placeholder: #94a3b8;
+
+  /* Tables */
+  --table-header-bg: #0d1527;
+  --table-header-text: #c7d2fe;
+  --table-row-hover: #1b2640;
+  --table-border: rgba(255, 255, 255, 0.08);
+}
+
+/* ===================================================
+   LIGHT THEME (Clean, Crisp, and Saturated)
+=================================================== */
+body.light-mode {
+  --bg-canvas: #f1f5f9;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --border-color: #cbd5e1;
+
+  /* Vivid text colors */
+  --text-main: #0f172a;
+  --text-dim: #475569;
+  --repo-name: #4338ca;  /* Deep Indigo */
+  --repo-url: #0284c7;   /* Strong Ocean Cyan */
+  --repo-owner: #334155; /* Slate Black */
+  --metric-val: #0f172a;
+
+  /* Inputs and controls */
+  --input-bg: #ffffff;
+  --input-border: #94a3b8;
+  --input-text: #0f172a;
+  --input-placeholder: #64748b;
+
+  /* Tables */
+  --table-header-bg: #e2e8f0;
+  --table-header-text: #1e1b4b;
+  --table-row-hover: #f8fafc;
+  --table-border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Unified Panel Containers */
+.devpulse-panel {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Table Specific High-Contrast Enhancements */
+.ant-table-wrapper .ant-table {
+  background: transparent !important;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background: var(--table-header-bg) !important;
+  color: var(--table-header-text) !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid var(--table-border) !important;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--table-border) !important;
+  color: var(--text-main) !important;
+  font-size: 13.5px;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr:hover > td {
+  background: var(--table-row-hover) !important;
+}
+
+/* Bright, Clear Table Cells */
+.repo-cell-name {
+  font-weight: 700;
+  color: var(--repo-name) !important;
+  font-size: 14.5px;
+  letter-spacing: -0.2px;
+}
+
+.repo-cell-url {
+  color: var(--repo-url) !important;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.repo-cell-url:hover {
+  text-decoration: underline;
+  filter: brightness(1.2);
+}
+
+.repo-cell-owner {
+  color: var(--repo-owner) !important;
+  font-weight: 600;
+}
+
+/* SHA Hash Pills */
+.code-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 12px;
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Crisp Input Fields */
+.ant-input,
+.ant-input-password,
+.ant-input-affix-wrapper,
+textarea.ant-input {
+  background-color: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
+  color: var(--input-text) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+}
+
+.ant-input::placeholder,
+.ant-input-password input::placeholder {
+  color: var(--input-placeholder) !important;
+}
+
+.ant-select-selector {
+  background-color: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
+  color: var(--input-text) !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+
+.ant-select-selection-item {
+  color: var(--input-text) !important;
+  font-weight: 600 !important;
+}
+
+.ant-form-item-label > label {
+  color: var(--text-main) !important;
+  font-weight: 700 !important;
+}
+
+/* Feedback message container */
+.feedback, .success-msg {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1.5px solid #10b981;
+  color: #34d399;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
