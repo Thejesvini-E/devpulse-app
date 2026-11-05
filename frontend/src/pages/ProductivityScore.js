@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Card, Row, Col, Statistic, Tag, message } from 'antd';
+import { Table, Card, Row, Col, Statistic, Tag, Alert, message } from 'antd';
 import { useSelector } from 'react-redux';
 import {
   TrophyOutlined,
@@ -13,18 +13,31 @@ const ProductivityScore = () => {
   const { user } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(null);
 
   const isPrivileged = user && (user.role === 'ROLE_ADMIN' || user.role === 'ROLE_MANAGER');
 
   useEffect(() => {
     const fetchProductivity = async () => {
       setLoading(true);
+      setLoadError(null);
       try {
         const endpoint = isPrivileged ? '/productivity/all' : '/productivity/me';
         const res = await api.get(endpoint);
         setData(res.data);
       } catch (err) {
-        message.error('Failed to load productivity metrics');
+        const status = err.response?.status;
+        const errorMessage = status === 401
+          ? 'Your session has expired. Sign in again to load productivity metrics.'
+          : status === 403
+            ? 'Your account does not have permission to view these productivity metrics.'
+            : err.response?.data?.message ||
+              (err.response
+                ? 'The server could not load productivity metrics. Please try again.'
+                : 'Cannot reach the server. Check that the backend is running and try again.');
+        setData(null);
+        setLoadError(errorMessage);
+        message.error(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -91,6 +104,25 @@ const ProductivityScore = () => {
 
     return (
       <div className="devpulse-glass-card" style={{ padding: 28 }}>
+        {loadError && <Alert type="error" showIcon message={loadError} style={{ marginBottom: 16 }} />}
+        {!loadError && Array.isArray(data) && data.length === 0 && (
+          <Alert
+            type="info"
+            showIcon
+            message="No developer activity has been recorded yet. Scores use recorded commits, merged pull requests, and closed assigned issues."
+            style={{ marginBottom: 16 }}
+          />
+        )}
+        {!loadError && Array.isArray(data) && data.length > 0 && data.every((entry) =>
+          !Number(entry.commits) && !Number(entry.mergedPrs) && !Number(entry.resolvedIssues)
+        ) && (
+          <Alert
+            type="info"
+            showIcon
+            message="All developer scores are zero because no matching activity has been recorded yet."
+            style={{ marginBottom: 16 }}
+          />
+        )}
         <div style={{ marginBottom: 20 }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc' }}>
             Engineering Leaderboard
@@ -112,6 +144,15 @@ const ProductivityScore = () => {
   // Developer view
   return (
     <div>
+      {loadError && <Alert type="error" showIcon message={loadError} style={{ marginBottom: 16 }} />}
+      {!loadError && data && !Number(data.commits) && !Number(data.mergedPrs) && !Number(data.resolvedIssues) && (
+        <Alert
+          type="info"
+          showIcon
+          message="No tracked activity yet. Metrics count commits, merged pull requests, and closed issues assigned to you."
+          style={{ marginBottom: 16 }}
+        />
+      )}
       <div style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: 24, fontWeight: 800, color: '#f8fafc', marginBottom: 4 }}>
           Personal Performance Index

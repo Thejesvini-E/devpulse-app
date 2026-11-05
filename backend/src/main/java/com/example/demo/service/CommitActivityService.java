@@ -6,6 +6,8 @@ import com.example.demo.model.Repository;
 import com.example.demo.repository.CommitActivityRepository;
 import com.example.demo.repository.RepositoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,11 +41,16 @@ public class CommitActivityService {
             entity.setCommitHash(UUID.randomUUID().toString().substring(0, 7));
         }
 
-        if (dto.getAuthor() != null && !String.valueOf(dto.getAuthor()).trim().isEmpty()) {
-            entity.setAuthor(String.valueOf(dto.getAuthor()));
-        } else {
-            entity.setAuthor("developer");
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticatedUsername = authentication != null
+                && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal())
+                ? authentication.getName()
+                : null;
+        String author = authenticatedUsername != null
+                ? authenticatedUsername
+                : dto.getAuthor();
+        entity.setAuthor(author != null && !author.trim().isEmpty() ? author : "developer");
 
         if (dto.getStatus() != null && !String.valueOf(dto.getStatus()).trim().isEmpty()) {
     entity.setStatus(String.valueOf(dto.getStatus()));

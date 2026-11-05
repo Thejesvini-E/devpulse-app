@@ -23,7 +23,17 @@ const RepositoryManagement = () => {
       const res = await api.get('/repositories');
       setRepos(res.data);
     } catch (err) {
-      message.error('Failed to load repositories');
+      const status = err.response?.status;
+      message.error(
+        status === 401
+          ? 'Your session has expired. Please sign in again.'
+          : status === 403
+            ? 'Your account does not have permission to view repositories.'
+            : err.response?.data?.message ||
+              (err.response
+                ? 'Failed to load repositories. Please try again.'
+                : 'Cannot reach the server. Check that the backend is running and try again.')
+      );
     } finally {
       setLoading(false);
     }
